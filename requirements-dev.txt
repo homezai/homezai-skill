@@ -1,0 +1,3 @@
+# Dev/test tooling only. The skill runtime uses the Python standard
+# library exclusively and requires none of these to run.
+pytest>=7.0

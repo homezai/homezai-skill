@@ -1,0 +1,12 @@
+# Never commit the real token / env.
+.env
+*.env
+!.env.example
+
+# Local version-check cache (per-checkout, machine-specific).
+.homezai_version_cache.json
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
