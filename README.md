@@ -75,6 +75,10 @@ HOMEZAI_API_TOKEN=hzai_your_token_here
 token you just generated. **Never commit `.env`** — it is gitignored; only
 `.env.example` is tracked.
 
+> If you have an older setup that used `HOMEZAI_AGENT_API_TOKEN`, the client
+> still reads it as a fallback, but `HOMEZAI_API_TOKEN` is the canonical name
+> and takes precedence.
+
 ## 4. Confirm the token works (read-only)
 
 ```bash

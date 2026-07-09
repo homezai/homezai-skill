@@ -60,7 +60,14 @@ class HomezaiClient:
         timeout: float = 30.0,
     ):
         base_url = base_url or os.environ.get("HOMEZAI_API_BASE_URL")
-        token = token or os.environ.get("HOMEZAI_API_TOKEN")
+        # HOMEZAI_API_TOKEN is the public/canonical variable name. Accept the
+        # legacy HOMEZAI_AGENT_API_TOKEN as a fallback so existing setups keep
+        # working; the public docs and .env.example still use HOMEZAI_API_TOKEN.
+        token = (
+            token
+            or os.environ.get("HOMEZAI_API_TOKEN")
+            or os.environ.get("HOMEZAI_AGENT_API_TOKEN")
+        )
         if not base_url:
             raise HomezaiApiError("HOMEZAI_API_BASE_URL is not set")
         if not token:

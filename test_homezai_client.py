@@ -59,6 +59,29 @@ def test_rejects_non_hzai_token():
         HomezaiClient(base_url=BASE, token="not-a-homezai-token")
 
 
+def test_token_read_from_canonical_env(monkeypatch):
+    monkeypatch.delenv("HOMEZAI_AGENT_API_TOKEN", raising=False)
+    monkeypatch.setenv("HOMEZAI_API_TOKEN", "hzai_canonical")
+    client = HomezaiClient(base_url=BASE)
+    assert client._token == "hzai_canonical"
+
+
+def test_token_falls_back_to_legacy_agent_env(monkeypatch):
+    # Existing installs whose .env only defines the legacy variable must still
+    # authenticate without manual remapping.
+    monkeypatch.delenv("HOMEZAI_API_TOKEN", raising=False)
+    monkeypatch.setenv("HOMEZAI_AGENT_API_TOKEN", "hzai_legacy")
+    client = HomezaiClient(base_url=BASE)
+    assert client._token == "hzai_legacy"
+
+
+def test_canonical_env_wins_over_legacy(monkeypatch):
+    monkeypatch.setenv("HOMEZAI_API_TOKEN", "hzai_canonical")
+    monkeypatch.setenv("HOMEZAI_AGENT_API_TOKEN", "hzai_legacy")
+    client = HomezaiClient(base_url=BASE)
+    assert client._token == "hzai_canonical"
+
+
 def test_sends_bearer_authorization_header():
     captured = {}
 
