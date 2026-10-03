@@ -55,9 +55,10 @@ of reporting an empty market.
 Filters: `--city` (partial match), `--state` (two letters), `--zip`,
 `--address`, `--q` (street name text), `--mls-id`, `--min-price`,
 `--max-price`, `--beds` and `--baths` (minimums), `--property-type`,
-`--status` (default Active), `--min-sqft`, `--max-sqft`, `--min-year-built`,
-`--max-year-built`, `--min-lot-size`, `--max-lot-size` (acres),
-`--max-days-on-market`. Paging: `--top` (max 100, default 25) and `--skip`.
+`--status` (default Active and Coming Soon), `--min-sqft`, `--max-sqft`,
+`--min-year-built`, `--max-year-built`, `--min-lot-size`, `--max-lot-size`
+(acres), `--max-days-on-market`. Paging: `--top` (max 100, default 25) and
+`--skip`.
 `--json` prints the raw response, which also carries remarks, photo URL,
 county, listing agent contact, showing instructions and dates. There is no
 radius or map search and no way to choose a feed.

@@ -112,7 +112,8 @@ brokerage and MLS memberships; brokerage and association admins may be
 narrowed to their offices; Homezai Admins reach every enabled feed. A market
 outside your feeds returns zero results because you lack access to it, not
 because it is empty. Run `--coverage` to see your feeds. `SKILL.md` lists
-every filter.
+every filter. If you omit `--status`, Homezai searches the current-market
+default: Active and Coming Soon listings.
 
 ## 5. Use it in code
 
