@@ -47,7 +47,11 @@ def _http_error(status, payload):
 # --------------------------------------------------------------------------- #
 # Construction / config
 # --------------------------------------------------------------------------- #
-def test_requires_base_url_and_token():
+def test_requires_base_url_and_token(monkeypatch):
+    # Agents run these tests with their real token exported. Clear it, or the
+    # client legitimately falls back to the environment and nothing raises.
+    for name in ("HOMEZAI_API_BASE_URL", "HOMEZAI_API_TOKEN", "HOMEZAI_AGENT_API_TOKEN"):
+        monkeypatch.delenv(name, raising=False)
     with pytest.raises(HomezaiApiError):
         HomezaiClient(base_url=None, token=TOKEN)
     with pytest.raises(HomezaiApiError):
