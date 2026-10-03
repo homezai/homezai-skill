@@ -96,7 +96,23 @@ OK — token authenticates and returns user-scoped data.
 ```
 
 If either command prints a line beginning with `[homezai-skill]`, a newer
-version of this skill is available — run `git pull` to update.
+version of this skill is available. Run `python3 update.py` to update (see
+"Staying up to date").
+
+## 4a. Search the MLS (read-only)
+
+```bash
+python mls_search.py --coverage                     # which MLS feeds this token reaches
+python mls_search.py --city Riverton --state AL --beds 3 --max-price 450000
+python mls_search.py --mls-id 123456 --json
+```
+
+Search is scoped to **your** MLS access. Homezai picks the feeds from your
+brokerage and MLS memberships; brokerage and association admins may be
+narrowed to their offices; Homezai Admins reach every enabled feed. A market
+outside your feeds returns zero results because you lack access to it, not
+because it is empty. Run `--coverage` to see your feeds. `SKILL.md` lists
+every filter.
 
 ## 5. Use it in code
 
@@ -117,7 +133,7 @@ except HomezaiAuthError as exc:
     print(exc)
 ```
 
-### Supported operations (v1)
+### Supported operations
 
 Read-only, user-scoped calls that prove the contract:
 
@@ -127,6 +143,7 @@ Read-only, user-scoped calls that prove the contract:
 | `whoami()` | `GET /api/v1/user/profile` | current user + capabilities |
 | `list_listings()` | `GET /api/v1/agent/listings` | listings visible to you |
 | `brokerage_context()` | `GET /api/v1/agent/brokerages/context` | your active brokerage |
+| `search_mls(params)` | `GET /api/v1/agent/mls/search` | live MLS search, scoped to your MLS access |
 
 Mutations are intentionally out of scope for v1. When you add them, use safe
 test data and clean up after yourself — a mutation runs with your real account
@@ -158,8 +175,18 @@ or malformed tokens fail closed (HTTP 401/403).
 `VERSION` in this repository. It runs on every command but contacts the network
 **at most once per day** (cached in `.homezai_version_cache.json`) and **fails
 open** — if GitHub is unreachable it stays silent and never blocks your command.
-When you are behind, every command prints a one-line notice telling you to
-`git pull`.
+When you are behind, every command prints a one-line notice telling you (or
+your agent) to run `python3 update.py`.
+
+`update.py` works for both kinds of install. In a `git clone` it runs
+`git pull --ff-only`. In a plain copy of the files it downloads the latest
+`main` from GitHub and replaces the skill's own files. Either way it keeps your
+`.env` and `LOCAL.md`, and it fails loudly if it cannot finish.
+`python3 update.py --check` re-checks GitHub immediately.
+
+Keep notes that belong to one install (where its token lives, which account it
+is) in `LOCAL.md` next to `SKILL.md`. Agents read it first, and updates never
+overwrite it.
 
 ## Run the tests
 

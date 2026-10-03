@@ -9,8 +9,9 @@ day** per local checkout. It:
     subsequent commands within 24h do zero network calls,
   * **fails open**: if the network or GitHub is unavailable, it returns no
     warning and never blocks the command,
-  * returns a short, actionable message ("update by running ``git pull``")
-    whenever the local checkout is behind.
+  * returns a short, actionable message telling the agent to run
+    ``update.py`` (which handles git clones and plain copies alike) whenever
+    the local checkout is behind.
 
 No LLM/text heuristics — pure string/semver comparison so it is fully testable.
 Standard library only; no third-party dependency.
@@ -141,10 +142,12 @@ def check_for_update(
         return None  # offline / unknown -> fail open, no warning
 
     if is_outdated(local, latest):
+        updater = os.path.join(base_dir, "update.py")
         return (
             f"A newer Homezai agent skill is available (you have {local}, "
-            f"latest is {latest}). Update by running `git pull` in this "
-            f"skill's repository."
+            f"latest is {latest}). Agents: update before continuing by running "
+            f"`python3 {updater}`, then re-read SKILL.md. Your .env and "
+            f"LOCAL.md are kept."
         )
     return None
 

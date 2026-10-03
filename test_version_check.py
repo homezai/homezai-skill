@@ -60,7 +60,11 @@ class CheckForUpdateTests(unittest.TestCase):
             self.base, now=lambda: 1000.0, fetch_latest=self._fetch("1.1.0")
         )
         self.assertIsNotNone(msg)
-        self.assertIn("git pull", msg)
+        # The notice is an instruction an agent can act on as written: the
+        # exact updater path, and a promise that local secrets survive it.
+        self.assertIn(f"python3 {os.path.join(self.base, 'update.py')}", msg)
+        self.assertIn("re-read SKILL.md", msg)
+        self.assertIn(".env", msg)
         self.assertIn("1.1.0", msg)
         self.assertEqual(self.calls["n"], 1)
         cache = self._cache()
