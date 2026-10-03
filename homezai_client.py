@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import os
 import urllib.error
+import urllib.parse
 import urllib.request
 from typing import Any, Optional
 
@@ -129,6 +130,24 @@ class HomezaiClient:
     def brokerage_context(self) -> Any:
         """The user's active brokerage context. GET brokerages/context."""
         return self._request("GET", "/api/v1/agent/brokerages/context")
+
+    def search_mls(self, params: Optional[dict] = None) -> Any:
+        """Live MLS search, scoped to this user's MLS access.
+
+        GET /api/v1/agent/mls/search, the search the agent portal runs. Homezai
+        decides which MLS feeds are searched from the token user's brokerage
+        and MLS memberships (a Homezai Admin reaches every enabled feed), so
+        two tokens can see different markets. ``params`` uses the API's own
+        names: city, state, zipCode, address, q, mlsId, minPrice, maxPrice,
+        beds, baths, propertyType, status, minSqft, maxSqft, minYearBuilt,
+        maxYearBuilt, minLotSize, maxLotSize, maxDaysOnMarket, top (max 100),
+        skip. Unset values are dropped.
+        """
+        clean = {k: v for k, v in (params or {}).items() if v is not None and v != ""}
+        path = "/api/v1/agent/mls/search"
+        if clean:
+            path = f"{path}?{urllib.parse.urlencode(clean)}"
+        return self._request("GET", path)
 
 
 def _safe_error_detail(exc: "urllib.error.HTTPError") -> str:

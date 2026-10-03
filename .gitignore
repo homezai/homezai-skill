@@ -3,6 +3,9 @@
 *.env
 !.env.example
 
+# Install-specific notes, never part of the published skill.
+LOCAL.md
+
 # Local version-check cache (per-checkout, machine-specific).
 .homezai_version_cache.json
 
