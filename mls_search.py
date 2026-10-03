@@ -178,7 +178,9 @@ def make_parser() -> argparse.ArgumentParser:
     flt.add_argument("--baths", type=float, help="minimum bathrooms")
     flt.add_argument("--property-type", dest="property_type",
                      help="e.g. Residential, Condominium, Land")
-    flt.add_argument("--status", help="listing status (default Active)")
+    flt.add_argument(
+        "--status", help="listing status (default Active and Coming Soon)"
+    )
     flt.add_argument("--min-sqft", dest="min_sqft", type=int)
     flt.add_argument("--max-sqft", dest="max_sqft", type=int)
     flt.add_argument("--min-year-built", dest="min_year_built", type=int)
